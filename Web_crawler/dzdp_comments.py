@@ -7,8 +7,8 @@ import random
 import time
 
 headers = {
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36',
-    'Cookie': '_lxsdk_cuid=168e5236e74c8-0db44206d0460a-133b6850-13c680-168e5236e7442; _lxsdk=168e5236e74c8-0db44206d0460a-133b6850-13c680-168e5236e7442; _hc.v=2225c4f0-6bd4-94b0-009f-b35460c64bf0.1550032532; cy=1; cye=shanghai; s_ViewType=10; ua=WeiXin_2162697619; ctu=d8939db80866d9543f092d50ec75d2fa808dc726b9f0c88b13d7398ad1a09628; dper=1ad2812285324f0ea68c0c581b08c942b8736bc0efd38cb226cb447402f97cd01beef05e8c0a9d35a5876ad015dbdd0ca0682ffd09398bc78f4dea7a73aec8ee39a108073201259cdf21d814f24601bb5f9d961edfcc561a41d3f8dfb021f7e2; ll=7fd06e815b796be3df069dec7836c3df; _lx_utm=utm_source%3Dbing%26utm_medium%3Dorganic; _lxsdk_s=16904a681f8-137-c3-6df%7C%7C835'
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.109 Safari/537.36',
+    'Cookie': '_lxsdk_cuid=168e5236e74c8-0db44206d0460a-133b6850-13c680-168e5236e7442; _lxsdk=168e5236e74c8-0db44206d0460a-133b6850-13c680-168e5236e7442; _hc.v=2225c4f0-6bd4-94b0-009f-b35460c64bf0.1550032532; cy=1; cye=shanghai; s_ViewType=10; ua=WeiXin_2162697619; ctu=d8939db80866d9543f092d50ec75d2fa808dc726b9f0c88b13d7398ad1a09628; dper=1ad2812285324f0ea68c0c581b08c942b8736bc0efd38cb226cb447402f97cd01beef05e8c0a9d35a5876ad015dbdd0ca0682ffd09398bc78f4dea7a73aec8ee39a108073201259cdf21d814f24601bb5f9d961edfcc561a41d3f8dfb021f7e2; ll=7fd06e815b796be3df069dec7836c3df; _lx_utm=utm_source%3Dbing%26utm_medium%3Dorganic; _lxsdk_s=1690966ca2a-064-c26-dc7%7C%7C579'
 }
 headers_no_cookie = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36'
@@ -56,7 +56,7 @@ def get_comments_from_url(url):
         css_pos_dict[code[1:]] = (float(x), float(y))
 
     # get textbook
-    comment_textbook = text_books[-1]
+    comment_textbook = text_books[0]
     # analyze textbook
     soup_comment_tb = BeautifulSoup(comment_textbook.decode('utf-8'), 'lxml')
     row_list = soup_comment_tb.find_all('path')
@@ -100,9 +100,11 @@ def get_comments_from_shop(shop_url):
     _res = _res.content.decode('utf-8')
     soup = BeautifulSoup(_res, 'lxml')
     # pdb.set_trace()
+    print('shop: ', shop_url)
     shop_name = soup.find('h1').contents[0]
 
     base_url = shop_url + '/review_all'
+    
     review_urls = [base_url]
     review_page_number = 10
     for i in range(2, review_page_number+1):
@@ -142,12 +144,12 @@ def web_crawler(start_url):
 
 if __name__ == '__main__':
     start_base_url = 'http://www.dianping.com/shanghai/ch10/'
-    for i in range(1, 51):
+    for i in range(9, 51):
         start_url = start_base_url + 'p' + str(i)
 
         sleep_seconds = random.randint(5, 15)
         print('sleep ', sleep_seconds, 'seconds')
         time.sleep(sleep_seconds)
-        print('Analyzing: ', start_url)
+        print('Analyzing: ', start_url, ', page: ', i)
         web_crawler(start_url)
 # print(get_comments_from_shop('http://www.dianping.com/shop/19612173'))
